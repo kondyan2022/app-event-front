@@ -28,6 +28,7 @@ export function RegisterForm({ event }) {
   useFormPersist("eventapp", {
     watch,
     setValue,
+    exclude: ["birthday"],
   });
 
   return (
