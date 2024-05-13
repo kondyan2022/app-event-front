@@ -1,4 +1,4 @@
-import { Outlet, useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
+import { useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
 import { EventCard } from "../../components/EventCard/EventCard";
 
 import { SortPanel } from "../../components/SortPanel/SortPanel";
@@ -13,13 +13,6 @@ export function EventListPage() {
 
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-
-  // let currentPage = parseInt(searchParams.get("page"));
-  // if (isNaN(currentPage)) {
-  //   currentPage = 1;
-  // }
-
-  console.log({ itemCount, limit, page });
 
   const handleView = (id) => {
     navigate(`event/${id}`, { state: { back: true } });
@@ -66,8 +59,6 @@ export function EventListPage() {
         total={itemCount}
         showSizeChanger={false}
       />
-
-      <Outlet />
     </EventListWrapper>
   );
 }
