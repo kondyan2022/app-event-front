@@ -1,10 +1,11 @@
 import { useForm } from "react-hook-form";
-import { useSubmit } from "react-router-dom";
+import { useNavigate, useSubmit } from "react-router-dom";
 import { adultOnly } from "../../utils";
 import { RegisterFormWrapper } from "./RegisterForm.styled";
 import useFormPersist from "react-hook-form-persist";
 
 export function RegisterForm({ event }) {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -21,6 +22,7 @@ export function RegisterForm({ event }) {
       action: `/registration/${event}`,
     });
     reset();
+    navigate(-1);
   };
 
   useFormPersist("eventapp", {
