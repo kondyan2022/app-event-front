@@ -7,25 +7,28 @@ import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
 import { addEventParticipantAction, eventLoader, participantsLoader } from "./api/loaders";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    children: [
-      {
-        path: "/",
-        element: <EventListPage />,
-        loader: eventLoader,
-      },
-      {
-        path: "event/:event",
-        element: <EventParticipantsPage />,
-        loader: participantsLoader,
-      },
-      { path: "registration/:event", element: <RegistrationPage />, action: addEventParticipantAction },
-    ],
-    errorElement: <ErrorPage />,
-  },
-]);
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <App />,
+      children: [
+        {
+          path: "/",
+          element: <EventListPage />,
+          loader: eventLoader,
+        },
+        {
+          path: "event/:event",
+          element: <EventParticipantsPage />,
+          loader: participantsLoader,
+        },
+        { path: "registration/:event", element: <RegistrationPage />, action: addEventParticipantAction },
+      ],
+      errorElement: <ErrorPage />,
+    },
+  ],
+  { basename: "/app-event-front" }
+);
 
 export default router;
