@@ -6,6 +6,33 @@ export const RegisterFormWrapper = styled.div`
     display: flex;
     flex-direction: column;
   }
+  /* .ant-picker-input > input::placeholder {
+    color: lightblue;
+  } */
+  .ant-picker {
+    width: 250px;
+    border: 2px solid steelblue;
+    & svg {
+      width: 18px;
+      height: 18px;
+      color: #0869b8;
+    }
+    & input {
+      transition: background-color 400ms ease-in-out;
+      color: #0869b8;
+      font-size: 16px;
+      font-family: inherit;
+      &::placeholder {
+        color: lightblue;
+        font-size: 16px;
+      }
+      &:focus-visible {
+        color: #0869b8;
+        border-color: #0869b8;
+        outline-color: #0869b8;
+      }
+    }
+  }
   p {
     text-align: right;
     color: tomato;
@@ -46,11 +73,12 @@ export const RegisterFormWrapper = styled.div`
     }
   }
   button {
-    padding: 10px 0;
+    /* padding: 10px 0; */
     border-radius: 5px;
     background-color: steelblue;
     border: none;
     color: white;
+    font-family: inherit;
     font-weight: 500;
     transition: background-color 400ms ease-in-out;
     &:hover,

@@ -1,35 +1,47 @@
-import { useForm } from "react-hook-form";
-import { useNavigate, useSubmit } from "react-router-dom";
+import { Controller, useForm } from "react-hook-form";
+import { useActionData, useNavigate, useNavigation, useSubmit } from "react-router-dom";
 import { adultOnly } from "../../utils";
 import { RegisterFormWrapper } from "./RegisterForm.styled";
 import useFormPersist from "react-hook-form-persist";
+import { useEffect } from "react";
+import { Button, DatePicker } from "antd";
+import dayjs from "dayjs";
 
 export function RegisterForm({ event }) {
+  const actionData = useActionData();
+  const navigation = useNavigation();
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
+    control,
     watch,
     reset,
     setValue,
     formState: { errors },
-  } = useForm({ defaultValues: { birthday: "2000-01-01" } });
+  } = useForm();
   const submit = useSubmit();
+
+  const disableForm = navigation.state === "submitting";
 
   const onSubmit = (data) => {
     submit(data, {
       method: "post",
       action: `/registration/${event}`,
     });
-    reset();
-    navigate(-1);
   };
 
   useFormPersist("eventapp", {
     watch,
     setValue,
-    exclude: ["birthday"],
   });
+
+  useEffect(() => {
+    if (actionData) {
+      reset();
+      navigate(-1);
+    }
+  }, [actionData, navigate, reset]);
 
   return (
     <RegisterFormWrapper>
@@ -44,6 +56,7 @@ export function RegisterForm({ event }) {
             })}
             id="fullname"
             placeholder="Full name"
+            disabled={disableForm}
           />
         </label>
         <p>{errors.fullname?.message}</p>
@@ -62,23 +75,38 @@ export function RegisterForm({ event }) {
             id="email"
             placeholder="E-mail"
             autoComplete="off"
+            disabled={disableForm}
           />
         </label>
         <p>{errors.email?.message}</p>
         <label>
           Date of birth
-          <input
-            type="date"
-            {...register("birthday", {
-              valueAsDate: true,
+          <Controller
+            control={control}
+            name="birthday"
+            rules={{
               required: "Required field",
               validate: adultOnly,
-            })}
-            id="birthday"
+            }}
+            render={({ field }) => {
+              return (
+                <DatePicker
+                  ref={field.ref}
+                  name={field.name}
+                  id={field.name}
+                  size="middle"
+                  onBlur={field.onBlur}
+                  onChange={(date) => {
+                    field.onChange(date ? date.valueOf() : null);
+                  }}
+                  value={field.value ? dayjs(field.value) : null}
+                />
+              );
+            }}
           />
         </label>
         <p>{errors.birthday?.message}</p>
-        <fieldset>
+        <fieldset disabled={disableForm}>
           <legend>Select a maintenance drone:</legend>
           <label>
             <input
@@ -109,7 +137,10 @@ export function RegisterForm({ event }) {
           </label>
         </fieldset>
         <p>{errors.subscription?.message}</p>
-        <button type="submit">Submit</button>
+
+        <Button type="primary" htmlType="submit" loading={disableForm} size={"large"}>
+          Submit
+        </Button>
       </form>
     </RegisterFormWrapper>
   );
