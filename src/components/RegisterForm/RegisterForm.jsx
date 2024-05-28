@@ -1,5 +1,5 @@
 import { Controller, useForm } from "react-hook-form";
-import { useActionData, useNavigate, useNavigation, useSubmit } from "react-router-dom";
+import { useActionData, useFetcher, useNavigate, useNavigation, useSearchParams } from "react-router-dom";
 import { adultOnly } from "../../utils";
 import { RegisterFormWrapper } from "./RegisterForm.styled";
 import useFormPersist from "react-hook-form-persist";
@@ -11,6 +11,7 @@ export function RegisterForm({ event }) {
   const actionData = useActionData();
   const navigation = useNavigation();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const {
     register,
     handleSubmit,
@@ -20,14 +21,14 @@ export function RegisterForm({ event }) {
     setValue,
     formState: { errors },
   } = useForm();
-  const submit = useSubmit();
+  const fetcher = useFetcher();
 
   const disableForm = navigation.state === "submitting";
 
   const onSubmit = (data) => {
-    submit(data, {
+    fetcher.submit(data, {
       method: "post",
-      action: `/registration/${event}`,
+      action: `/registration/${event}?${searchParams.toString()}`,
     });
   };
 
@@ -39,6 +40,7 @@ export function RegisterForm({ event }) {
   useEffect(() => {
     if (actionData) {
       reset();
+      console.log(window.history);
       navigate(-1);
     }
   }, [actionData, navigate, reset]);
@@ -97,7 +99,9 @@ export function RegisterForm({ event }) {
                   size="middle"
                   onBlur={field.onBlur}
                   onChange={(date) => {
-                    field.onChange(date ? date.valueOf() : null);
+                    if (date) {
+                      field.onChange(date ? date.valueOf() : null);
+                    }
                   }}
                   value={field.value ? dayjs(field.value) : null}
                 />

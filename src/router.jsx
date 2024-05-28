@@ -10,20 +10,23 @@ import { addEventParticipantAction, eventLoader, participantsLoader } from "./ap
 const router = createBrowserRouter(
   [
     {
-      path: "/",
+      // path: "/",
       element: <App />,
       children: [
         {
           path: "/",
+          // index: true,
           element: <EventListPage />,
           loader: eventLoader,
+          children: [
+            {
+              path: "/events/:event",
+              element: <EventParticipantsPage />,
+              loader: participantsLoader,
+            },
+            { path: "registration/:event", element: <RegistrationPage />, action: addEventParticipantAction },
+          ],
         },
-        {
-          path: "event/:event",
-          element: <EventParticipantsPage />,
-          loader: participantsLoader,
-        },
-        { path: "registration/:event", element: <RegistrationPage />, action: addEventParticipantAction },
       ],
       errorElement: <ErrorPage />,
     },

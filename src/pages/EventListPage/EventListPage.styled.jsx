@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 
 export const EventListWrapper = styled.div`
+  padding-top: 80px;
   .list {
     padding-top: 130px;
     display: flex;

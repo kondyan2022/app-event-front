@@ -5,12 +5,16 @@ export const EventParticipantWrapper = styled.div`
   height: 90vh;
   background-color: white;
   border-radius: 20px;
+  width: 90vw;
+  overflow: hidden;
   ul {
     display: flex;
     flex-wrap: wrap;
     align-content: flex-start;
     gap: 10px;
     justify-content: center;
+    overflow: auto;
+    height: calc(100% - 150px);
   }
   button {
     display: flex;
