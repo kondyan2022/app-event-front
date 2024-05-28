@@ -6,6 +6,7 @@ import { paramsToObject } from "../../utils";
 import { EventListWrapper } from "./EventListPage.styled";
 
 import { useEffect, useRef, useState } from "react";
+import { useInView } from "react-intersection-observer";
 
 export function EventListPage() {
   const {
@@ -14,7 +15,7 @@ export function EventListPage() {
   const [data, setData] = useState(loadedData);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const ref = useRef();
+  // const ref = useRef();
   const firstRender = useRef(true);
   const [currentPage, setCurrentPage] = useState(page);
 
@@ -73,6 +74,18 @@ export function EventListPage() {
     });
   };
 
+  const { ref } = useInView({
+    /* Optional options */
+    threshold: 0,
+    rootMargin: "100px",
+
+    onChange: (inView) => {
+      if (inView) {
+        handleNextPageLoad();
+      }
+    },
+  });
+
   return (
     <EventListWrapper>
       <div>
@@ -95,9 +108,7 @@ export function EventListPage() {
           </li>
         ))}
       </ul>
-      <button ref={ref} onClick={handleNextPageLoad}>
-        load down
-      </button>
+      <div ref={ref} onClick={handleNextPageLoad} style={{ width: 10, height: 10 }}></div>
       {/* <Pagination
         rootClassName="pag"
         onChange={handleChangePage}
